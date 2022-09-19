@@ -1,2 +1,3 @@
 # Tapping-Simulator-X-Script
-Goobers
+This is my shitty ass Tapping Simulator Script
+If you want to sent feedback please contact me on discord monkeyballer#4465
