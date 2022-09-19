@@ -1,0 +1,76 @@
+getgenv().autotap = false
+getgenv().autorebirth = false
+
+
+
+function tap()
+    spawn(function ()
+        while autotap == true do
+            game:GetService("ReplicatedStorage").Remotes.Tap:FireServer()
+            wait()
+         end
+    end)
+end
+
+function rebirth(rebirthamount)
+    spawn(function ()
+        while autorebirth == true do
+            local args = {
+                [1] = rebirthamount
+            }
+            
+            game:GetService("ReplicatedStorage").Remotes.Rebirth:FireServer(unpack(args))
+            wait()
+            end 
+    end)
+end
+
+function teleportTO(placeCFrame)
+    local plr = game.Players.LocalPlayer
+    if plr.Character then
+        plr.Character.HumanoidRootPart.CFrame = placeCFrame
+    end
+end
+
+function teleportworld(world)
+    if game:GetService("Workspace").Teleporters:FindFirstChild(world) then
+        teleportTO(game:GetService("Workspace").Teleporters[world].CFrame)
+    end
+end
+
+local DiscordLib = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/discord%20lib.txt")()
+
+
+local win = DiscordLib:Window("Tapping Simulator")
+
+local serv = win:Server("Tapping Simulator", "goober")
+
+local tgls = serv:Channel("Tapping")
+local caca = serv:Channel("Auto Rebirth")
+local drops = serv:Channel("Auto Hatch")
+local tp = serv:Channel("Teleport")
+
+tgls:Toggle("Tap",false, function(bool)
+    getgenv().autotap = bool
+    print("Tapping", bool)
+    if bool then
+        tap()
+    end
+end)
+
+local rebirthamount
+local drop = caca:Dropdown("Pick a rebirth amount...",{1,2,3,4,5,6}, function(bool)
+    print(bool)
+    rebirthamount = bool
+end)
+
+local worlds
+local drop = tp:Dropdown("Teleport Localtion",{'Spawn', 'Forest', 'Desert', 'Winter', 'Lava', 'Aqua', 'Sakura', 'Mines', 'Galaxy', 'Heaven', 'Hell', 'Tech', 'Steampunk', 'Swamp', 'Candy', 'Magic', 'Fantasy', 'Toy', 'Retro', 'Lab', 'Temple', 'Farm', 'Carnival'}, function(bool)
+    worlds = bool
+end)
+
+tp:Button("Teleport", function()
+    if worlds then 
+        teleportworld(worlds)
+    end
+end)
